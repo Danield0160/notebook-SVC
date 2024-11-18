@@ -1,0 +1,26 @@
+version: '3.0'
+services:
+  tensorflow:
+    container_name: tensorflow-gpu-SVC
+    image: thegeeksdiary/tensorflow-jupyter-gpu:latest
+    restart: unless-stopped
+    volumes:
+      - ./notebooks:/environment/notebooks
+      - ./data:/environment/data
+      - ./logs:/environment/logs
+      - ./models:/environment/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            device_ids: ['0']
+            capabilities: [gpu]
+    ports:
+      - '8888:8888'
+      - '79:79'
+    networks:
+      - jupyter
+networks:
+  jupyter:
+    driver: bridge
